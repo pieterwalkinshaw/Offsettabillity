@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
 import { AuthProvider } from "@/lib/auth/AuthContext";
+import { CookieConsent } from "@/components/ui/CookieConsent";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -11,8 +10,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Offsettable | Fund Verified Impact. Stay Audit-Ready.",
-  description: "Offsettable is a lead-generation-first ESG impact platform connecting corporates, funders, and institutions to verified, audit-ready social and environmental projects.",
+  title: "Offsettabillity | Fund Verified Impact. Stay Audit-Ready.",
+  description:
+    "Offsettabillity is a verified ESG impact platform connecting corporates, funders, and institutions to audit-ready social and environmental projects.",
 };
 
 export default function RootLayout({
@@ -26,16 +26,13 @@ export default function RootLayout({
       className={`${inter.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body 
+      <body
         className="min-h-full flex flex-col font-sans bg-background text-foreground"
         suppressHydrationWarning
       >
         <AuthProvider>
-          <Header />
-          <main className="flex-grow flex flex-col">
-            {children}
-          </main>
-          <Footer />
+          <main className="flex-grow flex flex-col">{children}</main>
+          <CookieConsent />
         </AuthProvider>
       </body>
     </html>
