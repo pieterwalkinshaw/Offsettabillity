@@ -1,0 +1,37 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // ─── Project Documents ─────────────────────────────────────────────────────
+    // Path: projects/{projectId}/documents/{fileName}
+    // Write: authenticated users (upload validated via Cloud Function signed URL)
+    // Read: project owner + admin (enforced via signed URLs from Cloud Functions)
+    match /projects/{projectId}/documents/{fileName} {
+      // Allow reads for authenticated users (fine-grained access via Cloud Functions)
+      allow read: if request.auth != null;
+
+      // Allow writes only for authenticated users with valid file constraints
+      // The Cloud Function validates ownership and document count before issuing
+      // a signed URL, so storage rules enforce file-level constraints as a safety net.
+      allow write: if request.auth != null
+        // File size must not exceed 5 MB
+        && request.resource.size <= 5 * 1024 * 1024
+        // File type must be PDF, PNG, or JPEG
+        && request.resource.contentType.matches('application/pdf|image/png|image/jpeg');
+    }
+
+    // ─── Audit Evidence Documents ──────────────────────────────────────────────
+    // Path: audits/{auditId}/evidence/{fileName}
+    match /audits/{auditId}/evidence/{fileName} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null
+        && request.resource.size <= 5 * 1024 * 1024
+        && request.resource.contentType.matches('application/pdf|image/png|image/jpeg');
+    }
+
+    // ─── Default: deny all other paths ─────────────────────────────────────────
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
