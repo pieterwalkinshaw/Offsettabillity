@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { useAuth } from '@/lib/auth/AuthContext';
@@ -73,22 +74,15 @@ function formatDate(dateStr: string): string {
 
 // ─── Page Component ──────────────────────────────────────────────────────────
 
-export default function ProjectDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default function ProjectDetailPage() {
+  const params = useParams();
   const { userProfile } = useAuth();
   const [project, setProject] = useState<Project | null>(null);
   const [audits, setAudits] = useState<Audit[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [projectId, setProjectId] = useState<string | null>(null);
 
-  // Resolve params (Next.js 16: params is a Promise)
-  useEffect(() => {
-    params.then((resolved) => setProjectId(resolved.id));
-  }, [params]);
+  const projectId = params.id as string;
 
   // Fetch project and audits from Firestore
   useEffect(() => {
@@ -112,23 +106,28 @@ export default function ProjectDetailPage({
         const projectData = { ...projectSnap.data(), projectId: projectSnap.id } as Project;
         setProject(projectData);
 
-        // Fetch completed audits for this project
-        const auditsQuery = query(
-          collection(db, 'audits'),
-          where('projectId', '==', projectId),
-          where('status', '==', 'completed')
-        );
-        const auditsSnap = await getDocs(auditsQuery);
-        const auditsList = auditsSnap.docs.map(
-          (d) => ({ ...d.data(), auditId: d.id } as Audit)
-        );
-        // Sort by completedAt descending
-        auditsList.sort((a, b) => {
-          const dateA = a.completedAt ? new Date(a.completedAt).getTime() : 0;
-          const dateB = b.completedAt ? new Date(b.completedAt).getTime() : 0;
-          return dateB - dateA;
-        });
-        setAudits(auditsList);
+        // Fetch completed audits for this project (non-blocking)
+        try {
+          const auditsQuery = query(
+            collection(db, 'audits'),
+            where('projectId', '==', projectId),
+            where('status', '==', 'completed')
+          );
+          const auditsSnap = await getDocs(auditsQuery);
+          const auditsList = auditsSnap.docs.map(
+            (d) => ({ ...d.data(), auditId: d.id } as Audit)
+          );
+          // Sort by completedAt descending
+          auditsList.sort((a, b) => {
+            const dateA = a.completedAt ? new Date(a.completedAt).getTime() : 0;
+            const dateB = b.completedAt ? new Date(b.completedAt).getTime() : 0;
+            return dateB - dateA;
+          });
+          setAudits(auditsList);
+        } catch (auditErr) {
+          // Audits failed but project loaded — show project without audits
+          console.warn('Failed to load audits:', auditErr);
+        }
       } catch (err) {
         setError('Failed to load project details. Please try again.');
       } finally {

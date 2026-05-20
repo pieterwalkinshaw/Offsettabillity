@@ -1,3 +1,5 @@
+'use client';
+
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, connectAuthEmulator } from 'firebase/auth';
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
@@ -21,12 +23,20 @@ const db = getFirestore(app);
 const functions = getFunctions(app);
 const storage = getStorage(app);
 
-// Connect to emulators in development when NEXT_PUBLIC_USE_EMULATORS is true
+// Connect to emulators in development
 if (process.env.NEXT_PUBLIC_USE_EMULATORS === 'true') {
-  connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
-  connectFirestoreEmulator(db, 'localhost', 8080);
-  connectFunctionsEmulator(functions, 'localhost', 5001);
-  connectStorageEmulator(storage, 'localhost', 9199);
+  try {
+    connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
+  } catch (_) { /* already connected */ }
+  try {
+    connectFirestoreEmulator(db, 'localhost', 8080);
+  } catch (_) { /* already connected */ }
+  try {
+    connectFunctionsEmulator(functions, 'localhost', 5001);
+  } catch (_) { /* already connected */ }
+  try {
+    connectStorageEmulator(storage, 'localhost', 9199);
+  } catch (_) { /* already connected */ }
 }
 
 export { app, auth, db, functions, storage };

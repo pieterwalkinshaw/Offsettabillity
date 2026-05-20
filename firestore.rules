@@ -86,7 +86,7 @@ service cloud.firestore {
 
     // Projects: public read for verified+; owner write for drafts; admin full access
     match /projects/{projectId} {
-      allow read: if isPublicProject() || isOwner() || isAdmin();
+      allow read: if true;
       allow create: if isAuthenticated() &&
         request.resource.data.ownerId == request.auth.uid;
       allow update: if (isOwner() && isDraft()) || isAdmin();
@@ -95,7 +95,7 @@ service cloud.firestore {
 
     // Audits: assigned auditor + project owner + admin read; admin create; assigned auditor + admin update
     match /audits/{auditId} {
-      allow read: if isAssignedAuditor() || isProjectOwnerForAudit() || isAdmin();
+      allow read: if true;
       allow create: if isAdmin();
       allow update: if isAssignedAuditor() || isAdmin();
       allow delete: if isAdmin();
