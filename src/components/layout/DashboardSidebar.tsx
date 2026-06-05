@@ -42,7 +42,7 @@ const NAV_ITEMS_BY_ROLE: Record<UserRole, NavItem[]> = {
   owner: [
     { label: 'Overview', href: '/overview', icon: LayoutDashboard },
     { label: 'My Projects', href: '/projects/mine', icon: FolderKanban },
-    { label: 'Create Project', href: '/projects/create', icon: PlusCircle },
+    { label: 'Create Project', href: '/dashboard/projects/new', icon: PlusCircle },
     { label: 'Documents', href: '/documents', icon: FileText },
   ],
   auditor: [
