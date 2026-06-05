@@ -10,9 +10,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Offsettabillity | Fund Verified Impact. Stay Audit-Ready.",
+  title: "Offsettable | Fund Verified Impact. Stay Audit-Ready.",
   description:
-    "Offsettabillity is a verified ESG impact platform connecting corporates, funders, and institutions to audit-ready social and environmental projects.",
+    "Offsettable is a verified ESG impact platform connecting corporates, funders, and institutions to audit-ready social and environmental projects.",
 };
 
 export default function RootLayout({

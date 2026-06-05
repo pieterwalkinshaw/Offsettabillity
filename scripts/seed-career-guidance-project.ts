@@ -1,7 +1,7 @@
 /**
  * Seed Script: Career Guidance Project
  *
- * Creates a compelling, verified project on the Offsettabillity platform:
+ * Creates a compelling, verified project on the Offsettable platform:
  * "Pathways to Purpose" — Psychometric Career Guidance for Rural Youth
  *
  * This project enables funders to sponsor psychometric assessments for
@@ -19,7 +19,7 @@ import { initializeApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 
 const app = initializeApp({
-  projectId: process.env.GCLOUD_PROJECT || process.env.FIREBASE_PROJECT_ID || 'demo-offsettabillity',
+  projectId: process.env.GCLOUD_PROJECT || process.env.FIREBASE_PROJECT_ID || 'demo-Offsettable',
 });
 
 const db = getFirestore(app);

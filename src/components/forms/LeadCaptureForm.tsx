@@ -363,7 +363,7 @@ export function LeadCaptureForm({
           className="mt-1 h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
         />
         <label htmlFor="lead-consent" className="text-sm text-foreground/70">
-          I agree to receive marketing communications from Offsettabillity.{' '}
+          I agree to receive marketing communications from Offsettable.{' '}
           <a
             href="/privacy"
             className="text-primary-600 underline hover:text-primary-700"

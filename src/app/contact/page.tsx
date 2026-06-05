@@ -51,8 +51,8 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <p className="font-medium text-foreground">Email</p>
-                      <a href="mailto:hello@offsettabillity.co.za" className="text-primary-600 hover:text-primary-700">
-                        hello@offsettabillity.co.za
+                      <a href="mailto:hello@Offsettable.co.za" className="text-primary-600 hover:text-primary-700">
+                        hello@Offsettable.co.za
                       </a>
                     </div>
                   </div>

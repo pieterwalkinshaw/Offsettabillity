@@ -70,7 +70,7 @@ Use these prompts with Midjourney, DALL-E, or Stable Diffusion to generate compe
 ## 8. Data & Impact Visualization
 
 **Prompt:**
-> Clean, modern infographic design on white background showing key impact metrics: "89% confidence increase" with upward arrow, "2,400 learners assessed" with people icons, "12% matric pass rate improvement" with graduation cap icon, "R850 per child" with heart icon. Green and gold color scheme matching Offsettabillity brand. Minimal, professional, data-driven design. Flat design style with subtle shadows.
+> Clean, modern infographic design on white background showing key impact metrics: "89% confidence increase" with upward arrow, "2,400 learners assessed" with people icons, "12% matric pass rate improvement" with graduation cap icon, "R850 per child" with heart icon. Green and gold color scheme matching Offsettable brand. Minimal, professional, data-driven design. Flat design style with subtle shadows.
 
 **Usage:** Impact metrics section, funder dashboard, reports
 

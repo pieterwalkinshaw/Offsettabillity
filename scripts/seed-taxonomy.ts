@@ -13,7 +13,7 @@ import { getFirestore } from 'firebase-admin/firestore';
 
 // Initialize Firebase Admin — uses emulator when FIRESTORE_EMULATOR_HOST is set
 const app = initializeApp({
-  projectId: process.env.GCLOUD_PROJECT || process.env.FIREBASE_PROJECT_ID || 'demo-offsettabillity',
+  projectId: process.env.GCLOUD_PROJECT || process.env.FIREBASE_PROJECT_ID || 'demo-Offsettable',
 });
 
 const db = getFirestore(app);

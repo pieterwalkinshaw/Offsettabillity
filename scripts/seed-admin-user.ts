@@ -8,7 +8,7 @@
  *   FIRESTORE_EMULATOR_HOST=localhost:8080 FIREBASE_AUTH_EMULATOR_HOST=localhost:9099 npx tsx scripts/seed-admin-user.ts
  *
  * Login credentials:
- *   Email:    admin@offsettabillity.co.za
+ *   Email:    admin@Offsettable.co.za
  *   Password: Admin123!
  */
 
@@ -17,13 +17,13 @@ import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 
 const app = initializeApp({
-  projectId: process.env.GCLOUD_PROJECT || process.env.FIREBASE_PROJECT_ID || 'demo-offsettabillity',
+  projectId: process.env.GCLOUD_PROJECT || process.env.FIREBASE_PROJECT_ID || 'demo-Offsettable',
 });
 
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const ADMIN_EMAIL = 'admin@offsettabillity.co.za';
+const ADMIN_EMAIL = 'admin@Offsettable.co.za';
 const ADMIN_PASSWORD = 'Admin123!';
 const ADMIN_NAME = 'Platform Admin';
 

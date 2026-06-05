@@ -167,14 +167,14 @@ export async function generateMetadata({
   const category = CATEGORIES.find((c) => c.id === id);
 
   if (!category) {
-    return { title: 'Category Not Found | Offsettabillity' };
+    return { title: 'Category Not Found | Offsettable' };
   }
 
   return {
-    title: `Verified ${category.name} Projects | Offsettabillity`,
+    title: `Verified ${category.name} Projects | Offsettable`,
     description: category.valueProposition,
     openGraph: {
-      title: `Verified ${category.name} Projects | Offsettabillity`,
+      title: `Verified ${category.name} Projects | Offsettable`,
       description: category.valueProposition,
     },
   };

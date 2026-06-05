@@ -1,4 +1,4 @@
-# Starting the Offsettabillity Platform Locally
+# Starting the Offsettable Platform Locally
 
 ## Prerequisites
 
@@ -11,8 +11,8 @@
 ### Terminal 1: Start Firebase Emulators
 
 ```bash
-cd Offsettabillity
-firebase emulators:start --project demo-offsettabillity
+cd Offsettable
+firebase emulators:start --project demo-Offsettable
 ```
 
 Wait until you see the emulator table showing all services running (Auth on 9099, Firestore on 8080, etc.)
@@ -20,7 +20,7 @@ Wait until you see the emulator table showing all services running (Auth on 9099
 ### Terminal 2: Seed Sample Data
 
 ```bash
-cd Offsettabillity
+cd Offsettable
 set FIRESTORE_EMULATOR_HOST=localhost:8080
 set FIREBASE_AUTH_EMULATOR_HOST=localhost:9099
 npx tsx scripts/seed-taxonomy.ts
@@ -37,7 +37,7 @@ After seeding, you can log in as the platform administrator:
 
 | Field | Value |
 |-------|-------|
-| **Email** | `admin@offsettabillity.co.za` |
+| **Email** | `admin@Offsettable.co.za` |
 | **Password** | `Admin123!` |
 
 Login at: http://localhost:3002/login
@@ -45,7 +45,7 @@ Login at: http://localhost:3002/login
 ### Terminal 3: Start Next.js Dev Server
 
 ```bash
-cd Offsettabillity
+cd Offsettable
 npx next dev -p 3002
 ```
 
@@ -93,7 +93,7 @@ Open your browser to:
 ## Project Structure (Key Files)
 
 ```
-Offsettabillity/
+Offsettable/
 ├── .env.local              ← Environment variables (USE_EMULATORS=true)
 ├── firebase.json           ← Firebase/emulator configuration
 ├── firestore.rules         ← Firestore security rules

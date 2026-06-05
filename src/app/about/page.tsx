@@ -16,7 +16,7 @@ export default function AboutPage() {
               Verified Impact You Can Trust
             </h1>
             <p className="mt-6 text-lg text-foreground/70 leading-relaxed">
-              Offsettabillity is the bridge between organisations seeking meaningful ESG impact and communities that need it most. We don't just connect funders to projects — we verify every claim, track every rand, and report every outcome.
+              Offsettable is the bridge between organisations seeking meaningful ESG impact and communities that need it most. We don't just connect funders to projects — we verify every claim, track every rand, and report every outcome.
             </p>
           </div>
         </div>
@@ -37,7 +37,7 @@ export default function AboutPage() {
                 South African businesses face an additional challenge: B-BBEE compliance demands verifiable social spending and enterprise development contributions. But finding qualifying projects, ensuring they're legitimate, and generating audit-ready documentation is time-consuming and risky.
               </p>
               <p className="font-medium text-foreground">
-                Offsettabillity eliminates that gap.
+                Offsettable eliminates that gap.
               </p>
             </div>
           </div>
@@ -139,7 +139,7 @@ export default function AboutPage() {
               Our Verification Methodology
             </h2>
             <p className="text-foreground/60">
-              Every project on Offsettabillity goes through a rigorous multi-stage verification process before it's available for funding.
+              Every project on Offsettable goes through a rigorous multi-stage verification process before it's available for funding.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

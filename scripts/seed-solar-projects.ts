@@ -1,7 +1,7 @@
 /**
  * Seed Script: Solar Carbon Credit Projects
  *
- * Creates two verified projects on the Offsettabillity platform:
+ * Creates two verified projects on the Offsettable platform:
  * 1. "SunRise Credits" — Residential solar installations with carbon credit returns
  * 2. "Solar Schools" — Community solar powering education infrastructure
  *
@@ -13,7 +13,7 @@ import { initializeApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 
 const app = initializeApp({
-  projectId: process.env.GCLOUD_PROJECT || process.env.FIREBASE_PROJECT_ID || 'demo-offsettabillity',
+  projectId: process.env.GCLOUD_PROJECT || process.env.FIREBASE_PROJECT_ID || 'demo-Offsettable',
 });
 
 const db = getFirestore(app);

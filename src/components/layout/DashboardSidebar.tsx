@@ -113,7 +113,7 @@ export function DashboardSidebar() {
             strokeLinejoin="round"
           />
         </svg>
-        <span className="text-lg font-bold text-primary-700">Offsettabillity</span>
+        <span className="text-lg font-bold text-primary-700">Offsettable</span>
         </a>
       </div>
 
@@ -203,7 +203,7 @@ export function DashboardSidebar() {
               strokeLinejoin="round"
             />
           </svg>
-          <span className="text-base font-bold text-primary-700">Offsettabillity</span>
+          <span className="text-base font-bold text-primary-700">Offsettable</span>
         </a>
         <button
           type="button"
