@@ -1,9 +1,94 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if false;
+
+    // Helper: Check if authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Helper: Check if admin
+    function isAdmin() {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Helper: Check if project owner
+    function isOwner() {
+      return isAuthenticated() &&
+        resource.data.ownerId == request.auth.uid;
+    }
+
+    // Helper: Check if draft
+    function isDraft() {
+      return resource.data.verificationStatus == 'draft';
+    }
+
+    // Helper: Check if assigned auditor
+    function isAssignedAuditor() {
+      return isAuthenticated() &&
+        resource.data.auditorId == request.auth.uid;
+    }
+
+    // Helper: Check if funder for a funding transaction
+    function isFunder() {
+      return isAuthenticated() &&
+        resource.data.funderId == request.auth.uid;
+    }
+
+    // Users: read own + admin reads all; write own profile
+    match /users/{userId} {
+      allow read: if isAuthenticated() &&
+        (request.auth.uid == userId || isAdmin());
+      allow write: if isAuthenticated() &&
+        request.auth.uid == userId;
+    }
+
+    // Projects: public read; owner creates; owner updates drafts; admin full
+    match /projects/{projectId} {
+      allow read: if true;
+      allow create: if isAuthenticated() &&
+        request.resource.data.ownerId == request.auth.uid;
+      allow update: if (isOwner() && isDraft()) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Audits: public read; admin create; assigned auditor + admin update
+    match /audits/{auditId} {
+      allow read: if true;
+      allow create: if isAdmin();
+      allow update: if isAssignedAuditor() || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Leads: admin only (public writes via Cloud Function)
+    match /leads/{leadId} {
+      allow read, write: if isAdmin();
+    }
+
+    // Taxonomy: public read; admin write
+    match /taxonomy/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Funding: funder + admin read; authenticated create; admin update
+    match /funding/{transactionId} {
+      allow read: if isFunder() || isAdmin();
+      allow create: if isAuthenticated();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Reports: public read; admin write
+    match /reports/{reportId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Rate limits: allow Cloud Function access (public writes via function)
+    match /rateLimits/{docId} {
+      allow read, write: if true;
     }
   }
 }
