@@ -55,6 +55,7 @@ const NAV_ITEMS_BY_ROLE: Record<UserRole, NavItem[]> = {
     { label: 'Overview', href: '/overview/admin', icon: LayoutDashboard },
     { label: 'Pre-screening', href: '/admin/prescreening', icon: Filter },
     { label: 'Leads', href: '/admin/leads', icon: Users },
+    { label: 'Users', href: '/admin/users', icon: Users },
     { label: 'Taxonomy', href: '/dashboard/admin/taxonomy', icon: Tag },
   ],
 };
