@@ -52,12 +52,10 @@ const NAV_ITEMS_BY_ROLE: Record<UserRole, NavItem[]> = {
     { label: 'Completed Audits', href: '/audits/completed', icon: CheckCircle2 },
   ],
   admin: [
-    { label: 'Overview', href: '/overview', icon: LayoutDashboard },
-    { label: 'Auditor Approvals', href: '/admin/approvals', icon: ShieldCheck },
+    { label: 'Overview', href: '/overview/admin', icon: LayoutDashboard },
     { label: 'Pre-screening', href: '/admin/prescreening', icon: Filter },
     { label: 'Leads', href: '/admin/leads', icon: Users },
-    { label: 'Taxonomy', href: '/admin/taxonomy', icon: Tag },
-    { label: 'Users', href: '/admin/users', icon: Users },
+    { label: 'Taxonomy', href: '/dashboard/admin/taxonomy', icon: Tag },
   ],
 };
 
