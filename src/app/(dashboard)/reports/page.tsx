@@ -135,7 +135,7 @@ function ReportsPage() {
                   </div>
                 </div>
                 <a
-                  href={`/projects/${report.projectId}`}
+                  href={`/project?id=${report.projectId}`}
                   className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-primary-700 border border-primary-300 rounded-lg hover:bg-primary-50 transition-colors shrink-0"
                 >
                   <Download className="w-4 h-4" />

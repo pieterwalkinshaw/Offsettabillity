@@ -218,7 +218,7 @@ function FundingConfirmationContent() {
       <div className="flex flex-col sm:flex-row gap-3">
         {project && (
           <Link
-            href={`/projects/${projectId}`}
+            href={`/project?id=${projectId}`}
             className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 border border-foreground/20 text-foreground font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           >
             View Project

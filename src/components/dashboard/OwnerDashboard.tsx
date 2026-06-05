@@ -353,7 +353,7 @@ function OwnerProjectRow({ project }: { project: Project }) {
 
   return (
     <a
-      href={`/projects/${projectId}`}
+      href={`/project?id=${projectId}`}
       className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-inset"
       aria-label={`View project: ${title}`}
     >
