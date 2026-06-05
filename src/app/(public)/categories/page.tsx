@@ -1,6 +1,4 @@
 import Link from 'next/link';
-import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
 
 const CATEGORIES = [
   { id: 'energy-saving', name: 'Energy Saving & Efficiency', icon: '⚡', metric: 'kWh Saved / CO₂e Avoided', sdgs: [7, 13] },
@@ -20,7 +18,6 @@ const CATEGORIES = [
 export default function CategoriesPage() {
   return (
     <div className="flex flex-col min-h-screen bg-background">
-      <Header />
 
       <section className="border-b border-gray-200 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
@@ -64,8 +61,6 @@ export default function CategoriesPage() {
           </div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 }
