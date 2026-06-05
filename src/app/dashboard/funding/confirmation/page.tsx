@@ -35,7 +35,9 @@ function formatDate(date: Date): string {
 
 // ─── Page Component ──────────────────────────────────────────────────────────
 
-export default function FundingConfirmationPage() {
+import { Suspense } from 'react';
+
+function FundingConfirmationContent() {
   const searchParams = useSearchParams();
   const { userProfile } = useAuth();
 
@@ -231,5 +233,13 @@ export default function FundingConfirmationPage() {
         </Link>
       </div>
     </div>
+  );
+}
+
+export default function FundingConfirmationPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-[60vh]"><Loader2 className="w-8 h-8 animate-spin text-primary-500" /></div>}>
+      <FundingConfirmationContent />
+    </Suspense>
   );
 }
