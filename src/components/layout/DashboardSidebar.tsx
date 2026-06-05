@@ -96,6 +96,7 @@ export function DashboardSidebar() {
     <div className="flex flex-col h-full">
       {/* Brand */}
       <div className="flex items-center gap-2 px-4 py-5 border-b border-gray-200">
+        <a href="/" className="flex items-center gap-2">
         <svg
           className="h-7 w-7 text-primary-600 shrink-0"
           viewBox="0 0 32 32"
@@ -112,6 +113,7 @@ export function DashboardSidebar() {
           />
         </svg>
         <span className="text-lg font-bold text-primary-700">Offsettabillity</span>
+        </a>
       </div>
 
       {/* Navigation */}
@@ -184,7 +186,7 @@ export function DashboardSidebar() {
     <>
       {/* Mobile top bar */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between h-14 px-4 bg-white border-b border-gray-200">
-        <div className="flex items-center gap-2">
+        <a href="/" className="flex items-center gap-2">
           <svg
             className="h-6 w-6 text-primary-600"
             viewBox="0 0 32 32"
@@ -201,7 +203,7 @@ export function DashboardSidebar() {
             />
           </svg>
           <span className="text-base font-bold text-primary-700">Offsettabillity</span>
-        </div>
+        </a>
         <button
           type="button"
           onClick={toggleMobile}
