@@ -86,16 +86,16 @@ service cloud.firestore {
 
     // Projects: public read for verified+; owner write for drafts; admin full access
     match /projects/{projectId} {
-      allow read: if true;
+      allow read: if resource.data.verificationStatus in ['verified', 'live', 'funded'] || isOwner() || isAdmin();
       allow create: if isAuthenticated() &&
         request.resource.data.ownerId == request.auth.uid;
       allow update: if (isOwner() && isDraft()) || isAdmin();
       allow delete: if isAdmin();
     }
 
-    // Audits: assigned auditor + project owner + admin read; admin create; assigned auditor + admin update
+    // Audits: public read for completed; assigned auditor + project owner + admin for others
     match /audits/{auditId} {
-      allow read: if true;
+      allow read: if resource.data.status == 'completed' || isAssignedAuditor() || isProjectOwnerForAudit() || isAdmin();
       allow create: if isAdmin();
       allow update: if isAssignedAuditor() || isAdmin();
       allow delete: if isAdmin();
