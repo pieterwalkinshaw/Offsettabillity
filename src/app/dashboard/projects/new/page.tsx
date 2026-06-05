@@ -333,7 +333,7 @@ export default function NewProjectPage() {
           | 'Annually'
           | 'Project Duration',
         primaryMetric: {
-          label: selectedCategory?.primaryMetricLabel ?? '',
+          label: selectedCategory?.primaryMetricLabel || 'Impact Units',
           value: Number(formData.primaryMetricValue),
         },
       },
@@ -343,8 +343,11 @@ export default function NewProjectPage() {
     const result = ProjectCreateSchema.safeParse(payload);
     if (!result.success) {
       const errors: FieldErrors = {};
+      const errorMessages: string[] = [];
       for (const issue of result.error.issues) {
         const path = issue.path.join('.');
+        const msg = `${path}: ${issue.message}`;
+        errorMessages.push(msg);
         if (path.includes('title')) errors.title = issue.message;
         else if (path.includes('description')) errors.description = issue.message;
         else if (path.includes('category')) errors.category = issue.message;
@@ -352,9 +355,10 @@ export default function NewProjectPage() {
         else if (path.includes('country')) errors.country = issue.message;
         else if (path.includes('fundingGoal')) errors.fundingGoal = issue.message;
         else if (path.includes('reportingPeriod')) errors.reportingPeriod = issue.message;
-        else if (path.includes('primaryMetric')) errors.primaryMetricValue = issue.message;
+        else if (path.includes('primaryMetric') || path.includes('label')) errors.primaryMetricValue = issue.message;
       }
       setFieldErrors(errors);
+      setSubmitError(`Validation failed: ${errorMessages.join('; ')}`);
       // Navigate to the first step with errors
       if (errors.title || errors.description || errors.category) setCurrentStep(0);
       else if (errors.address || errors.country || errors.fundingGoal) setCurrentStep(1);
