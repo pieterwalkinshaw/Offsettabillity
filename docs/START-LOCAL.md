@@ -22,12 +22,25 @@ Wait until you see the emulator table showing all services running (Auth on 9099
 ```bash
 cd Offsettabillity
 set FIRESTORE_EMULATOR_HOST=localhost:8080
+set FIREBASE_AUTH_EMULATOR_HOST=localhost:9099
 npx tsx scripts/seed-taxonomy.ts
 npx tsx scripts/seed-career-guidance-project.ts
 npx tsx scripts/seed-solar-projects.ts
+npx tsx scripts/seed-admin-user.ts
 ```
 
 You should see "✅ seeded successfully" messages for each script.
+
+### Admin Login Credentials
+
+After seeding, you can log in as the platform administrator:
+
+| Field | Value |
+|-------|-------|
+| **Email** | `admin@offsettabillity.co.za` |
+| **Password** | `Admin123!` |
+
+Login at: http://localhost:3002/login
 
 ### Terminal 3: Start Next.js Dev Server
 
