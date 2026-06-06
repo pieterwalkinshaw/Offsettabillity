@@ -4,21 +4,33 @@
  * Creates an admin user in both Firebase Auth emulator and Firestore emulator.
  * Use this account to log in as the platform administrator.
  *
- * Usage:
- *   FIRESTORE_EMULATOR_HOST=localhost:8080 FIREBASE_AUTH_EMULATOR_HOST=localhost:9099 npx tsx scripts/seed-admin-user.ts
+ * Usage (local emulator — just run it, no env vars needed):
+ *   npx tsx scripts/seed-admin-user.ts
+ *
+ * Usage (production — requires gcloud auth):
+ *   npx tsx scripts/seed-admin-user.ts --prod
  *
  * Login credentials:
  *   Email:    admin@Offsettable.co.za
  *   Password: Admin123!
  */
 
+// Auto-configure emulator connection unless targeting production
+const isProduction = process.argv.includes('--prod');
+if (!isProduction) {
+  process.env.FIRESTORE_EMULATOR_HOST = process.env.FIRESTORE_EMULATOR_HOST || 'localhost:8080';
+  process.env.FIREBASE_AUTH_EMULATOR_HOST = process.env.FIREBASE_AUTH_EMULATOR_HOST || 'localhost:9099';
+}
+
 import { initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 
-const app = initializeApp({
-  projectId: process.env.GCLOUD_PROJECT || process.env.FIREBASE_PROJECT_ID || 'demo-Offsettable',
-});
+const projectId = isProduction
+  ? (process.env.GCLOUD_PROJECT || 'offsettabillity')
+  : (process.env.GCLOUD_PROJECT || process.env.FIREBASE_PROJECT_ID || 'demo-offsettable');
+
+const app = initializeApp({ projectId });
 
 const auth = getAuth(app);
 const db = getFirestore(app);

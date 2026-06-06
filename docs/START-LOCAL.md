@@ -12,7 +12,7 @@
 
 ```bash
 cd Offsettable
-firebase emulators:start --project demo-Offsettable
+firebase emulators:start --project demo-offsettable
 ```
 
 Wait until you see the emulator table showing all services running (Auth on 9099, Firestore on 8080, etc.)
@@ -21,8 +21,6 @@ Wait until you see the emulator table showing all services running (Auth on 9099
 
 ```bash
 cd Offsettable
-set FIRESTORE_EMULATOR_HOST=localhost:8080
-set FIREBASE_AUTH_EMULATOR_HOST=localhost:9099
 npx tsx scripts/seed-taxonomy.ts
 npx tsx scripts/seed-career-guidance-project.ts
 npx tsx scripts/seed-solar-projects.ts
@@ -30,6 +28,8 @@ npx tsx scripts/seed-admin-user.ts
 ```
 
 You should see "✅ seeded successfully" messages for each script.
+
+> **Note:** The seed scripts automatically connect to the local Firebase Emulators. No environment variables need to be set manually.
 
 ### Admin Login Credentials
 
@@ -46,8 +46,18 @@ Login at: http://localhost:3002/login
 
 ```bash
 cd Offsettable
-npx next dev -p 3002
+http://localhost:3002/
 ```
+
+npx tsx scripts/seed-taxonomy.ts
+npx tsx scripts/seed-career-guidance-project.ts
+npx tsx scripts/seed-solar-projects.ts
+npx tsx scripts/seed-admin-user.ts
+
+
+
+
+
 
 The app will start on **http://localhost:3002**
 
@@ -73,7 +83,7 @@ Open your browser to:
 
 - The **Firebase Emulators must be running** before the app can load data. If you see "Could not reach Cloud Firestore backend" errors, make sure Terminal 1 is running.
 - The **seed scripts must run after emulators start**. Emulator data is lost every time emulators restart.
-- The `.env.local` file sets `NEXT_PUBLIC_USE_EMULATORS=true` which tells the app to connect to local emulators instead of production Firebase.
+- The `.env.development` file sets `NEXT_PUBLIC_USE_EMULATORS=true` which tells the app to connect to local emulators instead of production Firebase.
 
 ## Stopping
 
@@ -94,13 +104,14 @@ Open your browser to:
 
 ```
 Offsettable/
-├── .env.local              ← Environment variables (USE_EMULATORS=true)
+├── .env.development        ← Environment variables (USE_EMULATORS=true)
 ├── firebase.json           ← Firebase/emulator configuration
 ├── firestore.rules         ← Firestore security rules
 ├── scripts/
 │   ├── seed-taxonomy.ts              ← Seeds 12 project categories
 │   ├── seed-career-guidance-project.ts  ← Career Guidance project
-│   └── seed-solar-projects.ts        ← Solar Credits + Solar Schools
+│   ├── seed-solar-projects.ts        ← Solar Credits + Solar Schools
+│   └── seed-admin-user.ts           ← Admin user (admin@Offsettable.co.za)
 ├── src/app/                ← Next.js pages
 ├── functions/              ← Cloud Functions (backend)
 └── shared/                 ← Shared types and schemas

@@ -264,3 +264,84 @@ export interface ApiErrorResponse {
 }
 
 export type ApiResponse<T = unknown> = ApiSuccessResponse<T> | ApiErrorResponse;
+
+// ─── Carbon Credit Types ─────────────────────────────────────────────────────
+
+export interface CreditInventory {
+  inventoryId: string;           // Auto-generated document ID
+  projectId: string;             // FK to Project.projectId
+  availableTonnage: number;      // Metric tons CO₂e, 2 decimal places
+  totalTonnage: number;          // Original tonnage (never decrements)
+  unitPriceCents: number;        // Price per ton in ZAR integer cents
+  projectTitle: string;          // Denormalized for read performance
+  projectLocation: string;       // Denormalized (address string)
+  createdAt: string;             // ISO 8601 timestamp
+  updatedAt: string;             // ISO 8601 timestamp
+}
+
+export type CreditPackageTier = 'bronze' | 'silver' | 'gold' | 'platinum';
+
+export interface CreditPackage {
+  packageId: string;             // Auto-generated document ID
+  name: string;                  // Display name (e.g. "Bronze Package")
+  tier: CreditPackageTier;       // Tier identifier for ordering
+  tonnage: number;               // Metric tons in this package
+  priceCents: number;            // Total package price in ZAR integer cents
+  discountPercentage: number;    // Calculated: (1 - priceCents / (tonnage * unitPriceCents)) * 100
+  isActive: boolean;             // Only active packages shown in marketplace
+  sortOrder: number;             // Display ordering
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type PurchaseTransactionStatus = 'pending' | 'confirmed' | 'failed' | 'refunded';
+
+export interface PurchaseTransaction {
+  transactionId: string;         // Auto-generated document ID
+  funderId: string;              // FK to User.userId (role=funder)
+  quantity: number;              // Metric tons purchased (2 decimal places)
+  unitPriceCents: number;        // Price per ton at time of purchase
+  totalAmountCents: number;      // Total in ZAR integer cents
+  currency: string;              // ISO 4217, always "ZAR"
+  status: PurchaseTransactionStatus;
+  packageId?: string;            // FK to CreditPackage (if package purchase)
+  projectAllocations: ProjectAllocation[];  // Which projects supply the credits
+  certificateId?: string;        // FK to Certificate (set after generation)
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProjectAllocation {
+  projectId: string;
+  projectTitle: string;          // Denormalized
+  tonnage: number;               // Tons allocated from this project
+}
+
+export interface Certificate {
+  certificateId: string;         // Unique alphanumeric ID (≥12 chars)
+  transactionId: string;         // FK to PurchaseTransaction
+  funderId: string;              // FK to User.userId
+  funderOrganisationName: string;// Denormalized from User
+  tonnageOffset: number;         // Total tons on this certificate
+  projectTitle: string;          // Primary project title
+  projectLocation: string;       // Primary project location
+  storagePath: string;           // Cloud Storage path: certificates/{funderId}/{transactionId}.pdf
+  generatedAt: string;           // ISO 8601 timestamp
+}
+
+// ─── Carbon Credit Request Types ─────────────────────────────────────────────
+
+export type CreditPurchaseRequest = {
+  quantity: number;
+  projectAllocations: { projectId: string; tonnage: number }[];
+  packageId?: string;
+};
+
+export type CreditPackageInput = {
+  name: string;
+  tier: CreditPackageTier;
+  tonnage: number;
+  priceCents: number;
+  isActive: boolean;
+  sortOrder: number;
+};

@@ -104,6 +104,41 @@ export const TaxonomyCategorySchema = z.object({
   sortOrder: z.number().int().min(0).max(999).default(0),
 });
 
+// ─── Carbon Credit Purchase Schema ──────────────────────────────────────────
+
+export const CreditPurchaseSchema = z.object({
+  quantity: z.number().min(1).max(100000).refine(
+    (val) => Number(val.toFixed(2)) === val,
+    { message: 'Quantity must have at most 2 decimal places' }
+  ),
+  projectAllocations: z.array(z.object({
+    projectId: z.string().min(1),
+    tonnage: z.number().min(0.01),
+  })).min(1),
+  packageId: z.string().optional(),
+});
+
+// ─── Credit Package Admin Schema ─────────────────────────────────────────────
+
+export const CreditPackageSchema = z.object({
+  name: z.string().min(1).max(100),
+  tier: z.enum(['bronze', 'silver', 'gold', 'platinum']),
+  tonnage: z.number().min(1).max(100000),
+  priceCents: z.number().int().min(100).max(999999999),
+  isActive: z.boolean(),
+  sortOrder: z.number().int().min(0).max(999),
+});
+
+// ─── Export Date Range Schema ────────────────────────────────────────────────
+
+export const ExportDateRangeSchema = z.object({
+  startDate: z.string().datetime(),
+  endDate: z.string().datetime(),
+}).refine(
+  (data) => new Date(data.startDate) < new Date(data.endDate),
+  { message: 'Start date must be before end date' }
+);
+
 // ─── Inferred Types from Schemas ─────────────────────────────────────────────
 
 export type LeadCreateInput = z.infer<typeof LeadCreateSchema>;
@@ -112,3 +147,6 @@ export type AuditSubmitInput = z.infer<typeof AuditSubmitSchema>;
 export type FundingCreateInput = z.infer<typeof FundingCreateSchema>;
 export type RegistrationInput = z.infer<typeof RegistrationSchema>;
 export type TaxonomyCategoryInput = z.infer<typeof TaxonomyCategorySchema>;
+export type CreditPurchaseInput = z.infer<typeof CreditPurchaseSchema>;
+export type CreditPackageInput = z.infer<typeof CreditPackageSchema>;
+export type ExportDateRangeInput = z.infer<typeof ExportDateRangeSchema>;

@@ -20,6 +20,7 @@ import {
   X,
   LogOut,
   Settings,
+  Leaf,
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth/AuthContext';
 import type { UserRole } from '@shared/types';
@@ -36,6 +37,7 @@ const NAV_ITEMS_BY_ROLE: Record<UserRole, NavItem[]> = {
   funder: [
     { label: 'Overview', href: '/overview', icon: LayoutDashboard },
     { label: 'My Funded Projects', href: '/funding', icon: FolderKanban },
+    { label: 'Carbon Credits', href: '/credits', icon: Leaf },
     { label: 'Browse Projects', href: '/projects', icon: Search },
     { label: 'Reports', href: '/reports', icon: FileBarChart },
   ],
@@ -54,6 +56,7 @@ const NAV_ITEMS_BY_ROLE: Record<UserRole, NavItem[]> = {
   admin: [
     { label: 'Overview', href: '/overview/admin', icon: LayoutDashboard },
     { label: 'Pre-screening', href: '/admin/prescreening', icon: Filter },
+    { label: 'Credit Inventory', href: '/admin/credits', icon: Leaf },
     { label: 'Leads', href: '/admin/leads', icon: Users },
     { label: 'Users', href: '/admin/users', icon: Users },
     { label: 'Taxonomy', href: '/dashboard/admin/taxonomy', icon: Tag },

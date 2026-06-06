@@ -86,6 +86,36 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // Credit Inventory: authenticated read; write only via Cloud Functions
+    match /creditInventory/{inventoryId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Only via Cloud Functions
+    }
+
+    // Credit Packages: authenticated read; write only via admin Cloud Functions
+    match /creditPackages/{packageId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Only via admin Cloud Functions
+    }
+
+    // Purchase Transactions: own funder or admin read; write only via Cloud Functions
+    match /purchaseTransactions/{transactionId} {
+      allow read: if isAuthenticated() && (
+        resource.data.funderId == request.auth.uid ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+      );
+      allow write: if false; // Only via Cloud Functions
+    }
+
+    // Certificates: own funder or admin read; write only via Cloud Functions
+    match /certificates/{certificateId} {
+      allow read: if isAuthenticated() && (
+        resource.data.funderId == request.auth.uid ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+      );
+      allow write: if false; // Only via Cloud Functions
+    }
+
     // Rate limits: allow Cloud Function access (public writes via function)
     match /rateLimits/{docId} {
       allow read, write: if true;

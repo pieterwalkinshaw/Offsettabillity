@@ -8,19 +8,28 @@
  * children in remote rural communities, informing their subject choices
  * and career guidance.
  *
- * Usage:
- *   FIRESTORE_EMULATOR_HOST=localhost:8080 npx tsx scripts/seed-career-guidance-project.ts
- *
- * Or against production (with credentials):
+ * Usage (local emulator — just run it, no env vars needed):
  *   npx tsx scripts/seed-career-guidance-project.ts
+ *
+ * Usage (production — requires gcloud auth):
+ *   npx tsx scripts/seed-career-guidance-project.ts --prod
  */
+
+// Auto-configure emulator connection unless targeting production
+const isProduction = process.argv.includes('--prod');
+if (!isProduction) {
+  process.env.FIRESTORE_EMULATOR_HOST = process.env.FIRESTORE_EMULATOR_HOST || 'localhost:8080';
+  process.env.FIREBASE_AUTH_EMULATOR_HOST = process.env.FIREBASE_AUTH_EMULATOR_HOST || 'localhost:9099';
+}
 
 import { initializeApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 
-const app = initializeApp({
-  projectId: process.env.GCLOUD_PROJECT || process.env.FIREBASE_PROJECT_ID || 'demo-Offsettable',
-});
+const projectId = isProduction
+  ? (process.env.GCLOUD_PROJECT || 'offsettabillity')
+  : (process.env.GCLOUD_PROJECT || process.env.FIREBASE_PROJECT_ID || 'demo-offsettable');
+
+const app = initializeApp({ projectId });
 
 const db = getFirestore(app);
 
