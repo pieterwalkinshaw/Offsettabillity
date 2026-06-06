@@ -1,20 +1,30 @@
 /**
  * Seed script: Populate Firestore with the 12 initial taxonomy categories.
  *
- * Usage:
+ * Usage (local emulator — just run it, no env vars needed):
  *   npx tsx scripts/seed-taxonomy.ts
  *
+ * Usage (production — requires gcloud auth):
+ *   npx tsx scripts/seed-taxonomy.ts --prod
+ *
  * The script is idempotent — running it multiple times produces the same state.
- * It connects to the Firestore emulator when FIRESTORE_EMULATOR_HOST is set.
+ * It auto-connects to the Firestore emulator unless --prod is passed.
  */
+
+// Auto-configure emulator connection unless targeting production
+const isProduction = process.argv.includes('--prod');
+if (!isProduction) {
+  process.env.FIRESTORE_EMULATOR_HOST = process.env.FIRESTORE_EMULATOR_HOST || 'localhost:8080';
+}
 
 import { initializeApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 
-// Initialize Firebase Admin — uses emulator when FIRESTORE_EMULATOR_HOST is set
-const app = initializeApp({
-  projectId: process.env.GCLOUD_PROJECT || process.env.FIREBASE_PROJECT_ID || 'demo-offsettabillity',
-});
+const projectId = isProduction
+  ? (process.env.GCLOUD_PROJECT || 'offsettabillity')
+  : (process.env.GCLOUD_PROJECT || process.env.FIREBASE_PROJECT_ID || 'demo-offsettable');
+
+const app = initializeApp({ projectId });
 
 const db = getFirestore(app);
 

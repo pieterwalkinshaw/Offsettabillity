@@ -2,81 +2,41 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // ─── Helper Functions ──────────────────────────────────────────────────────
-
-    // Check if the request is from an authenticated user
+    // Helper: Check if authenticated
     function isAuthenticated() {
       return request.auth != null;
     }
 
-    // Check if the authenticated user has the admin role
+    // Helper: Check if admin
     function isAdmin() {
       return isAuthenticated() &&
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
 
-    // Check if the authenticated user is the owner of the project document
+    // Helper: Check if project owner
     function isOwner() {
       return isAuthenticated() &&
         resource.data.ownerId == request.auth.uid;
     }
 
-    // Check if the project is in draft status
+    // Helper: Check if draft
     function isDraft() {
       return resource.data.verificationStatus == 'draft';
     }
 
-    // Check if the project is publicly visible (verified, live, or funded)
-    function isPublicProject() {
-      return resource.data.verificationStatus in ['verified', 'live', 'funded'];
-    }
-
-    // Check if the authenticated user is the assigned auditor for an audit document
+    // Helper: Check if assigned auditor
     function isAssignedAuditor() {
       return isAuthenticated() &&
         resource.data.auditorId == request.auth.uid;
     }
 
-    // Check if the authenticated user is the project owner for an audit document
-    // (looks up the project referenced by the audit's projectId)
-    function isProjectOwnerForAudit() {
-      return isAuthenticated() &&
-        get(/databases/$(database)/documents/projects/$(resource.data.projectId)).data.ownerId == request.auth.uid;
-    }
-
-    // Check if the authenticated user is the funder for a funding transaction
+    // Helper: Check if funder for a funding transaction
     function isFunder() {
       return isAuthenticated() &&
         resource.data.funderId == request.auth.uid;
     }
 
-    // Check if the authenticated user is the project owner for a funding transaction
-    // (looks up the project referenced by the transaction's projectId)
-    function isProjectOwnerForFunding() {
-      return isAuthenticated() &&
-        get(/databases/$(database)/documents/projects/$(resource.data.projectId)).data.ownerId == request.auth.uid;
-    }
-
-    // Check if a report has public access level
-    function isPublicReport() {
-      return resource.data.accessLevel == 'public';
-    }
-
-    // Check if a report has gated access level (accessible to authenticated users)
-    function isGatedReport() {
-      return isAuthenticated() &&
-        resource.data.accessLevel == 'gated';
-    }
-
-    // Check if the authenticated user is a funder who funded the report's project
-    function isFunderForReport() {
-      return isAuthenticated() &&
-        exists(/databases/$(database)/documents/funding/$(request.auth.uid + '_' + resource.data.projectId));
-    }
-
-    // ─── Collection Rules ──────────────────────────────────────────────────────
-
-    // Users: read own profile + admin reads all; write own profile only
+    // Users: read own + admin reads all; write own profile
     match /users/{userId} {
       allow read: if isAuthenticated() &&
         (request.auth.uid == userId || isAdmin());
@@ -84,50 +44,81 @@ service cloud.firestore {
         request.auth.uid == userId;
     }
 
-    // Projects: public read for verified+; owner write for drafts; admin full access
+    // Projects: public read; owner creates; owner updates drafts; admin full
     match /projects/{projectId} {
-      allow read: if isPublicProject() || isOwner() || isAdmin();
+      allow read: if true;
       allow create: if isAuthenticated() &&
         request.resource.data.ownerId == request.auth.uid;
       allow update: if (isOwner() && isDraft()) || isAdmin();
       allow delete: if isAdmin();
     }
 
-    // Audits: assigned auditor + project owner + admin read; admin create; assigned auditor + admin update
+    // Audits: public read; admin create; assigned auditor + admin update
     match /audits/{auditId} {
-      allow read: if isAssignedAuditor() || isProjectOwnerForAudit() || isAdmin();
+      allow read: if true;
       allow create: if isAdmin();
       allow update: if isAssignedAuditor() || isAdmin();
       allow delete: if isAdmin();
     }
 
-    // Leads: admin only (public writes go through Cloud Function)
+    // Leads: admin only (public writes via Cloud Function)
     match /leads/{leadId} {
       allow read, write: if isAdmin();
     }
 
-    // Taxonomy: public read (no auth required); admin write
+    // Taxonomy: public read; admin write
     match /taxonomy/{categoryId} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    // Funding: funder + project owner + admin read; funder create; admin update
+    // Funding: funder + admin read; authenticated create; admin update
     match /funding/{transactionId} {
-      allow read: if isFunder() || isProjectOwnerForFunding() || isAdmin();
-      allow create: if isAuthenticated() &&
-        request.resource.data.funderId == request.auth.uid;
+      allow read: if isFunder() || isAdmin();
+      allow create: if isAuthenticated();
       allow update: if isAdmin();
       allow delete: if isAdmin();
     }
 
-    // Reports: access-level based read; admin write
+    // Reports: public read; admin write
     match /reports/{reportId} {
-      allow read: if isPublicReport() || isGatedReport() || isAdmin();
+      allow read: if true;
       allow write: if isAdmin();
     }
 
-    // ─── Deny all other access ─────────────────────────────────────────────────
-    // Any collection not explicitly matched above is denied by default
+    // Credit Inventory: authenticated read; write only via Cloud Functions
+    match /creditInventory/{inventoryId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Only via Cloud Functions
+    }
+
+    // Credit Packages: authenticated read; write only via admin Cloud Functions
+    match /creditPackages/{packageId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Only via admin Cloud Functions
+    }
+
+    // Purchase Transactions: own funder or admin read; write only via Cloud Functions
+    match /purchaseTransactions/{transactionId} {
+      allow read: if isAuthenticated() && (
+        resource.data.funderId == request.auth.uid ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+      );
+      allow write: if false; // Only via Cloud Functions
+    }
+
+    // Certificates: own funder or admin read; write only via Cloud Functions
+    match /certificates/{certificateId} {
+      allow read: if isAuthenticated() && (
+        resource.data.funderId == request.auth.uid ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+      );
+      allow write: if false; // Only via Cloud Functions
+    }
+
+    // Rate limits: allow Cloud Function access (public writes via function)
+    match /rateLimits/{docId} {
+      allow read, write: if true;
+    }
   }
 }

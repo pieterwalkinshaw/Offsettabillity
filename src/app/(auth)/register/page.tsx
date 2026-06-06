@@ -409,7 +409,7 @@ export default function RegisterPage() {
             Create your account
           </h1>
           <p className="text-gray-500 mb-6 text-sm">
-            {step === 1 && 'Choose how you want to use Offsettabillity'}
+            {step === 1 && 'Choose how you want to use Offsettable'}
             {step === 2 && 'Enter your account details'}
             {step === 3 && 'Complete your profile'}
           </p>

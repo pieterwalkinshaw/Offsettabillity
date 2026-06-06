@@ -1,7 +1,7 @@
 /**
  * Lead Capture Touchpoints — Verification & Documentation
  *
- * This file documents all lead capture touchpoints across the Offsettabillity platform.
+ * This file documents all lead capture touchpoints across the Offsettable platform.
  * Each touchpoint submits to the `/api/leads` endpoint (Cloud Function: leads_create)
  * with honeypot detection, consent checkbox, and UTM parameter attachment.
  *

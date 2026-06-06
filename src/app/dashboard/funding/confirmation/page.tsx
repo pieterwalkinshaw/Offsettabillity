@@ -35,7 +35,9 @@ function formatDate(date: Date): string {
 
 // ─── Page Component ──────────────────────────────────────────────────────────
 
-export default function FundingConfirmationPage() {
+import { Suspense } from 'react';
+
+function FundingConfirmationContent() {
   const searchParams = useSearchParams();
   const { userProfile } = useAuth();
 
@@ -216,7 +218,7 @@ export default function FundingConfirmationPage() {
       <div className="flex flex-col sm:flex-row gap-3">
         {project && (
           <Link
-            href={`/projects/${projectId}`}
+            href={`/project?id=${projectId}`}
             className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 border border-foreground/20 text-foreground font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           >
             View Project
@@ -231,5 +233,13 @@ export default function FundingConfirmationPage() {
         </Link>
       </div>
     </div>
+  );
+}
+
+export default function FundingConfirmationPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-[60vh]"><Loader2 className="w-8 h-8 animate-spin text-primary-500" /></div>}>
+      <FundingConfirmationContent />
+    </Suspense>
   );
 }

@@ -203,9 +203,9 @@ export function Footer() {
       {/* Bottom Bar */}
       <div className="border-t border-gray-200 bg-gray-100">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-foreground/50">
-            © {new Date().getFullYear()} Offsettabillity. All rights reserved.
-          </p>
+          <a href="/" className="text-xs text-foreground/50 hover:text-foreground/70 transition-colors">
+            © {new Date().getFullYear()} Offsettable. All rights reserved.
+          </a>
           <div className="flex items-center gap-4">
             {LEGAL_LINKS.map((link) => (
               <Link

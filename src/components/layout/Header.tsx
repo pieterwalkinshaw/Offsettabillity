@@ -57,7 +57,7 @@ export function Header() {
                 strokeLinejoin="round"
               />
             </svg>
-            <span>Offsettabillity</span>
+            <span>Offsettable</span>
           </Link>
 
           {/* Desktop Navigation */}

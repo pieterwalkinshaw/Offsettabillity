@@ -48,6 +48,15 @@ export { funding_create } from './funding/create';
 export { funding_confirmPayment } from './funding/confirmPayment';
 export { funding_failPayment } from './funding/failPayment';
 
+// ─── Carbon Credits (Authenticated) ──────────────────────────────────────────
+
+export { credits_purchase } from './credits/purchase';
+export { credits_confirmPurchase } from './credits/confirmPurchase';
+export { credits_generateCertificate } from './credits/generateCertificate';
+export { credits_packageCreate, credits_packageUpdate, credits_packageDeactivate } from './credits/packages';
+export { credits_exportCSV } from './credits/exportCSV';
+export { credits_exportPDF } from './credits/exportPDF';
+
 // ─── Admin Operations (Authenticated, Admin Only) ────────────────────────────
 
 /**

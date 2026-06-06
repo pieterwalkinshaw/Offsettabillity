@@ -31,6 +31,8 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
     }
 
     if (allowedRoles && allowedRoles.length > 0 && userProfile) {
+      // Admin can access all pages regardless of allowedRoles
+      if (userProfile.role === 'admin') return;
       if (!allowedRoles.includes(userProfile.role)) {
         router.replace('/overview');
       }
@@ -55,7 +57,7 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
   }
 
   if (allowedRoles && allowedRoles.length > 0 && userProfile) {
-    if (!allowedRoles.includes(userProfile.role)) {
+    if (userProfile.role !== 'admin' && !allowedRoles.includes(userProfile.role)) {
       return null;
     }
   }

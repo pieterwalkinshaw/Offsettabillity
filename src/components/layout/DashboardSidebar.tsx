@@ -20,6 +20,7 @@ import {
   X,
   LogOut,
   Settings,
+  Leaf,
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth/AuthContext';
 import type { UserRole } from '@shared/types';
@@ -36,13 +37,14 @@ const NAV_ITEMS_BY_ROLE: Record<UserRole, NavItem[]> = {
   funder: [
     { label: 'Overview', href: '/overview', icon: LayoutDashboard },
     { label: 'My Funded Projects', href: '/funding', icon: FolderKanban },
+    { label: 'Carbon Credits', href: '/credits', icon: Leaf },
     { label: 'Browse Projects', href: '/projects', icon: Search },
     { label: 'Reports', href: '/reports', icon: FileBarChart },
   ],
   owner: [
     { label: 'Overview', href: '/overview', icon: LayoutDashboard },
     { label: 'My Projects', href: '/projects/mine', icon: FolderKanban },
-    { label: 'Create Project', href: '/projects/create', icon: PlusCircle },
+    { label: 'Create Project', href: '/dashboard/projects/new', icon: PlusCircle },
     { label: 'Documents', href: '/documents', icon: FileText },
   ],
   auditor: [
@@ -52,12 +54,12 @@ const NAV_ITEMS_BY_ROLE: Record<UserRole, NavItem[]> = {
     { label: 'Completed Audits', href: '/audits/completed', icon: CheckCircle2 },
   ],
   admin: [
-    { label: 'Overview', href: '/overview', icon: LayoutDashboard },
-    { label: 'Auditor Approvals', href: '/admin/approvals', icon: ShieldCheck },
+    { label: 'Overview', href: '/overview/admin', icon: LayoutDashboard },
     { label: 'Pre-screening', href: '/admin/prescreening', icon: Filter },
+    { label: 'Credit Inventory', href: '/admin/credits', icon: Leaf },
     { label: 'Leads', href: '/admin/leads', icon: Users },
-    { label: 'Taxonomy', href: '/admin/taxonomy', icon: Tag },
     { label: 'Users', href: '/admin/users', icon: Users },
+    { label: 'Taxonomy', href: '/dashboard/admin/taxonomy', icon: Tag },
   ],
 };
 
@@ -98,6 +100,7 @@ export function DashboardSidebar() {
     <div className="flex flex-col h-full">
       {/* Brand */}
       <div className="flex items-center gap-2 px-4 py-5 border-b border-gray-200">
+        <a href="/" className="flex items-center gap-2">
         <svg
           className="h-7 w-7 text-primary-600 shrink-0"
           viewBox="0 0 32 32"
@@ -113,7 +116,8 @@ export function DashboardSidebar() {
             strokeLinejoin="round"
           />
         </svg>
-        <span className="text-lg font-bold text-primary-700">Offsettabillity</span>
+        <span className="text-lg font-bold text-primary-700">Offsettable</span>
+        </a>
       </div>
 
       {/* Navigation */}
@@ -186,7 +190,7 @@ export function DashboardSidebar() {
     <>
       {/* Mobile top bar */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between h-14 px-4 bg-white border-b border-gray-200">
-        <div className="flex items-center gap-2">
+        <a href="/" className="flex items-center gap-2">
           <svg
             className="h-6 w-6 text-primary-600"
             viewBox="0 0 32 32"
@@ -202,8 +206,8 @@ export function DashboardSidebar() {
               strokeLinejoin="round"
             />
           </svg>
-          <span className="text-base font-bold text-primary-700">Offsettabillity</span>
-        </div>
+          <span className="text-base font-bold text-primary-700">Offsettable</span>
+        </a>
         <button
           type="button"
           onClick={toggleMobile}

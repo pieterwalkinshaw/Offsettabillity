@@ -4,8 +4,8 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
-        "source": "/api/**",
-        "function": "api"
+        "source": "/api/leads",
+        "function": "leads_create"
       },
       {
         "source": "**",

@@ -90,7 +90,7 @@ export function ProjectCard({ project, categoryName }: ProjectCardProps) {
 
   return (
     <Link
-      href={`/projects/${projectId}`}
+      href={`/project?id=${projectId}`}
       className="block w-full rounded-xl border border-gray-200 bg-white p-5 shadow-sm hover:shadow-md hover:border-primary-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:h-[280px] sm:flex sm:flex-col"
       aria-label={`View project: ${title}`}
     >

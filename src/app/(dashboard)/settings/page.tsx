@@ -144,7 +144,7 @@ export default function SettingsPage() {
             Marketing Communications
           </h2>
           <p className="text-sm text-foreground/70 mb-4">
-            Control whether you receive marketing communications from Offsettabillity.
+            Control whether you receive marketing communications from Offsettable.
             Changes take effect within 24 hours.{' '}
             <a
               href="/privacy"

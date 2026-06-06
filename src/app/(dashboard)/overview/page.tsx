@@ -17,7 +17,8 @@ import { db } from '@/lib/firebase/config';
 import { useAuth } from '@/lib/auth/AuthContext';
 import { ProjectCard } from '@/components/projects/ProjectCard';
 import { OwnerDashboard } from '@/components/dashboard/OwnerDashboard';
-import type { FundingTransaction, Project, User } from '@shared/types';
+import { CarbonOffsetSummaryCard } from '@/components/dashboard/CarbonOffsetSummaryCard';
+import type { FundingTransaction, Project, PurchaseTransaction, User } from '@shared/types';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -136,6 +137,11 @@ function FunderDashboard() {
   });
   const [recommendedProjects, setRecommendedProjects] = useState<SectionState<Project[]>>({
     data: [],
+    loading: true,
+    error: null,
+  });
+  const [carbonOffset, setCarbonOffset] = useState<SectionState<{ totalTonnage: number; purchaseCount: number }>>({
+    data: { totalTonnage: 0, purchaseCount: 0 },
     loading: true,
     error: null,
   });
@@ -326,6 +332,41 @@ function FunderDashboard() {
     }
   }, [user]);
 
+  // ─── Fetch Carbon Offset Summary ────────────────────────────────────────
+
+  const fetchCarbonOffset = useCallback(async () => {
+    if (!user) return;
+
+    setCarbonOffset((prev) => ({ ...prev, loading: true, error: null }));
+
+    try {
+      const purchasesQuery = query(
+        collection(db, 'purchaseTransactions'),
+        where('funderId', '==', user.uid),
+        where('status', '==', 'confirmed')
+      );
+      const snapshot = await getDocs(purchasesQuery);
+
+      let totalTonnage = 0;
+      snapshot.docs.forEach((doc) => {
+        const data = doc.data() as PurchaseTransaction;
+        totalTonnage += data.quantity;
+      });
+
+      setCarbonOffset({
+        data: { totalTonnage, purchaseCount: snapshot.size },
+        loading: false,
+        error: null,
+      });
+    } catch {
+      setCarbonOffset((prev) => ({
+        ...prev,
+        loading: false,
+        error: 'Failed to load carbon offset data.',
+      }));
+    }
+  }, [user]);
+
   // ─── Initial Data Fetch ──────────────────────────────────────────────────
 
   useEffect(() => {
@@ -333,8 +374,9 @@ function FunderDashboard() {
       fetchFundedProjects();
       fetchTotalContribution();
       fetchRecommendedProjects();
+      fetchCarbonOffset();
     }
-  }, [user, userProfile, fetchFundedProjects, fetchTotalContribution, fetchRecommendedProjects]);
+  }, [user, userProfile, fetchFundedProjects, fetchTotalContribution, fetchRecommendedProjects, fetchCarbonOffset]);
 
   // ─── Load More Handler ───────────────────────────────────────────────────
 
@@ -372,11 +414,27 @@ function FunderDashboard() {
               onRetry={fetchTotalContribution}
             />
           ) : (
-            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-              <p className="text-sm text-foreground/60 mb-1">Total confirmed funding</p>
-              <p className="text-3xl font-bold text-primary-700">
-                {formatZARCents(totalContribution.data)}
-              </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                <p className="text-sm text-foreground/60 mb-1">Total confirmed funding</p>
+                <p className="text-3xl font-bold text-primary-700">
+                  {formatZARCents(totalContribution.data)}
+                </p>
+              </div>
+
+              {carbonOffset.loading ? (
+                <MetricSkeleton />
+              ) : carbonOffset.error ? (
+                <SectionError
+                  message={carbonOffset.error}
+                  onRetry={fetchCarbonOffset}
+                />
+              ) : (
+                <CarbonOffsetSummaryCard
+                  totalTonnage={carbonOffset.data.totalTonnage}
+                  purchaseCount={carbonOffset.data.purchaseCount}
+                />
+              )}
             </div>
           )}
         </section>
