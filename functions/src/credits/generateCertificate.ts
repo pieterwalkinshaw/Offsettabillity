@@ -237,7 +237,10 @@ function renderCertificatePDF(params: {
  * purchaseTransaction document's status changes to 'confirmed'.
  */
 export const credits_generateCertificate = onDocumentUpdated(
-  'purchaseTransactions/{transactionId}',
+  {
+    document: 'purchaseTransactions/{transactionId}',
+    region: 'us-central1',
+  },
   async (event) => {
     // Get before and after data
     const beforeData = event.data?.before.data() as PurchaseTransaction | undefined;

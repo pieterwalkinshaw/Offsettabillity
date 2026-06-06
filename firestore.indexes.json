@@ -36,13 +36,6 @@
       ]
     },
     {
-      "collectionGroup": "creditInventory",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "availableTonnage", "order": "DESCENDING" }
-      ]
-    },
-    {
       "collectionGroup": "creditPackages",
       "queryScope": "COLLECTION",
       "fields": [
